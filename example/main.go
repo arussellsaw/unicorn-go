@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/arussellsaw/unicorn-go"
+	"github.com/arussellsaw/unicorn-go/util"
 )
 
 func main() {
@@ -33,6 +35,39 @@ func main() {
 		return
 	}
 	err = c.Show()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	time.Sleep(1 * time.Second)
+	circ := util.Circle(43, [2]int{0, 0}, util.Cyan)
+	m := util.Matrix{}
+	m.AddSupersample(circ)
+	ps := unicorn.DeMatrix(m)
+	err = c.SetAllPixels(ps)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	err = c.Show()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for i := 40; i > 0; i-- {
+		err = c.SetBrightness(uint(i))
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		err = c.Show()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		time.Sleep(200 * time.Millisecond)
+	}
+	err = c.SetBrightness(40)
 	if err != nil {
 		fmt.Println(err)
 		return
